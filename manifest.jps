@@ -1,0 +1,54 @@
+type: install
+id: cantaloupe
+name: Cantaloupe IIIF Image Server
+homepage: https://cantaloupe-project.github.io/
+baseUrl: https://raw.githubusercontent.com/reclaimhosting/cantaloupe-jps/master
+logo: images/cantaloupe.png
+
+description: 
+  text: Cantaloupe is an open-source IIIF-compliant dynamic image server for on-demand generation of derivatives of high-resolution source images.
+  
+categories:
+- apps/education
+
+globals:
+  password: ${fn.password(10)}
+
+nodes:
+  - cloudlets: 8
+    nodeGroup: cp
+    nodeType: javaengine
+    tag: jdk-1.8.0_202
+  
+onInstall:
+  - deployArchive
+  - configureApp
+  - restartNodes:
+      nodeGroup: [cp]
+
+actions:
+  configureApp:
+    - cmd[cp]: |-
+        echo '-Dcantaloupe.config=/home/jelastic/APP/cantaloupe.properties' >> /home/jelastic/conf/variables.conf;
+        sed -i 's|endpoint.admin.secret =|endpoint.admin.secret = ${globals.password}|g' /home/jelastic/APP/cantaloupe.properties;
+        mkdir /home/jelastic/images
+      
+    - env.file.AddFavorite:
+        nodeGroup: cp
+        path: /home/jelastic/images
+        keyword: IMAGES
+        isDir: true
+
+  deployArchive:
+    deploy:
+      archive: https://cloud-jps-archives.s3.amazonaws.com/cantaloupe-4.1.6.zip
+      name: cantaloupe-4.1.6.zip
+      context: ROOT
+      
+ssl: true
+skipNodeEmails: true
+
+success: | 
+  **Admin URL**: [https://${env.domain}/admin](https://${env.domain}/admin)
+  **Username**: admin
+  **Password**: ${globals.password}
