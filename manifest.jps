@@ -39,6 +39,9 @@ actions:
         echo "-Dcantaloupe.config=/home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties" >> /home/jelastic/conf/variables.conf;
         sed -i 's|endpoint.admin.secret =|endpoint.admin.secret = ${globals.password}|g' /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties;
         sed -i 's|endpoint.admin.enabled = false|endpoint.admin.enabled = true|g' /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties;
+        sed -i 's|endpoint.admin.enabled = false|endpoint.admin.enabled = true|g' /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties;
+        sed -i 's|http.port = 8182|http.port = 80|g' /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties;
+        sed -i 's|http.port = 8183|http.port = 443|g' /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties;
         mkdir /home/jelastic/images
       
     - env.file.AddFavorite:
