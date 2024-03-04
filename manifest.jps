@@ -18,7 +18,7 @@ nodes:
   - cloudlets: 8
     nodeGroup: cp
     nodeType: javaengine
-    tag: jdk-1.8.0_201
+    tag: openjdk-11.0.22-almalinux-9
   
 onInstall:
   - deployArchive
@@ -28,8 +28,9 @@ onInstall:
 
 actions:
   configureApp:
-    - cmd[cp]: |-
-        echo '-Dcantaloupe.config=/home/jelastic/APP/cantaloupe.properties' >> /home/jelastic/conf/variables.conf;
+    - cmd[cp]: |- 
+        cp /home/jelastic/APPcantaloupe-5.0.6/cantaloupe.properties.sample /home/jelastic/APPcantaloupe-5.0.6/cantaloupe.properties 
+        echo '-Dcantaloupe.config=/home/jelastic/APP/cantaloupe-5.0.6/cantaloupe.properties' >> /home/jelastic/conf/variables.conf;
         sed -i 's|endpoint.admin.secret =|endpoint.admin.secret = ${globals.password}|g' /home/jelastic/APP/cantaloupe.properties;
         mkdir /home/jelastic/images
       
@@ -41,8 +42,8 @@ actions:
 
   deployArchive:
     deploy:
-      archive: https://cloud-jps-archives.s3.amazonaws.com/cantaloupe-4.1.6.zip
-      name: cantaloupe-4.1.6.zip
+      archive: https://github.com/cantaloupe-project/cantaloupe/releases/download/v5.0.6/cantaloupe-5.0.6.zip
+      name: cantaloupe-5.0.6.zip
       context: ROOT
       
 ssl: true
