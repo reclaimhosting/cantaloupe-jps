@@ -54,5 +54,7 @@ skipNodeEmails: true
 
 success: | 
   **Admin URL**: [https://${env.domain}/admin](https://${env.domain}/admin)
+
   **Username**: admin
+
   **Password**: ${globals.password}
