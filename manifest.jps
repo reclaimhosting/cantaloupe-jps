@@ -38,6 +38,7 @@ actions:
         cp /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties.sample /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties
         echo "-Dcantaloupe.config=/home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties" >> /home/jelastic/conf/variables.conf;
         sed -i 's|endpoint.admin.secret =|endpoint.admin.secret = ${globals.password}|g' /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties;
+        sed -i 's|endpoint.admin.enabled = false|endpoint.admin.enabled = true|g' /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties;
         mkdir /home/jelastic/images
       
     - env.file.AddFavorite:
