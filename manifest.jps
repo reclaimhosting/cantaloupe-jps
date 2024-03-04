@@ -34,13 +34,14 @@ actions:
         LATEST_RELEASE=`curl -s https://api.github.com/repos/cantaloupe-project/cantaloupe/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/'`
         wget https://github.com/cantaloupe-project/cantaloupe/releases/download/v$LATEST_RELEASE/cantaloupe-$LATEST_RELEASE.zip
         unzip cantaloupe-$LATEST_RELEASE.zip
+        mv cantaloupe-$LATEST_RELEASE/* .
         rm cantaloupe-$LATEST_RELEASE.zip
-        cp /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties.sample /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties
-        echo "-Dcantaloupe.config=/home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties" >> /home/jelastic/conf/variables.conf;
-        sed -i 's|endpoint.admin.secret =|endpoint.admin.secret = ${globals.password}|g' /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties;
-        sed -i 's|endpoint.admin.enabled = false|endpoint.admin.enabled = true|g' /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties;
-        sed -i 's|endpoint.admin.enabled = false|endpoint.admin.enabled = true|g' /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties;
-        sed -i 's|http.port = 8182|http.port = 8080|g' /home/jelastic/APP/cantaloupe-$LATEST_RELEASE/cantaloupe.properties;
+        cp ./cantaloupe.properties.sample ./cantaloupe.properties
+        echo "-Dcantaloupe.config=/home/jelastic/APP/cantaloupe.properties" >> /home/jelastic/conf/variables.conf;
+        sed -i 's|endpoint.admin.secret =|endpoint.admin.secret = ${globals.password}|g' ./cantaloupe.properties;
+        sed -i 's|endpoint.admin.enabled = false|endpoint.admin.enabled = true|g' ./cantaloupe.properties;
+        sed -i 's|endpoint.admin.enabled = false|endpoint.admin.enabled = true|g' ./cantaloupe.properties;
+        sed -i 's|http.port = 8182|http.port = 8080|g' ./cantaloupe.properties;
         mkdir /home/jelastic/images
       
     - env.file.AddFavorite:
