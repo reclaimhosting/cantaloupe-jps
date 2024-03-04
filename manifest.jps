@@ -18,7 +18,7 @@ nodes:
   - cloudlets: 8
     nodeGroup: cp
     nodeType: javaengine
-    tag: jdk-1.8.0_202
+    tag: jdk-1.8.0_201
   
 onInstall:
   - deployArchive
