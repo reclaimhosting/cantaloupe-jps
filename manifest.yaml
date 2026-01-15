@@ -27,17 +27,21 @@ onInstall:
 
 actions:
   deploy:
+    - cmd[cp]: |-
+        dnf update -q
+        dnf install -q freetype freetype-devel
+      user: root
     - cmd[cp]: |- 
         cd /home/jelastic/APP
         rm -rf target
         rm jelastic-helloworld*.jar
         LATEST_RELEASE=`curl -s https://api.github.com/repos/cantaloupe-project/cantaloupe/releases/latest | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/'`
-        wget https://github.com/cantaloupe-project/cantaloupe/releases/download/v$LATEST_RELEASE/cantaloupe-$LATEST_RELEASE.zip
+        wget --quiet https://github.com/cantaloupe-project/cantaloupe/releases/download/v$LATEST_RELEASE/cantaloupe-$LATEST_RELEASE.zip
         unzip cantaloupe-$LATEST_RELEASE.zip
         mv cantaloupe-$LATEST_RELEASE/* .
         rm cantaloupe-$LATEST_RELEASE.zip
         cp ./cantaloupe.properties.sample ./cantaloupe.properties
-        echo "-Dcantaloupe.config=/home/jelastic/APP/cantaloupe.properties" >> /home/jelastic/conf/variables.conf;
+        echo "-Djava.awt.headless=true -Dcantaloupe.config=/home/jelastic/APP/cantaloupe.properties " >> /home/jelastic/conf/variables.conf;
         sed -i 's|endpoint.admin.secret =|endpoint.admin.secret = ${globals.password}|g' ./cantaloupe.properties;
         sed -i 's|endpoint.admin.enabled = false|endpoint.admin.enabled = true|g' ./cantaloupe.properties;
         sed -i 's|endpoint.admin.enabled = false|endpoint.admin.enabled = true|g' ./cantaloupe.properties;
@@ -51,7 +55,7 @@ actions:
         isDir: true
 
 ssl: true
-skipNodeEmails: true
+skipNodeEmails: false
 
 success: | 
   **Admin URL**: [https://${env.domain}/admin](https://${env.domain}/admin)
