@@ -15,7 +15,7 @@ globals:
   password: ${fn.password(10)}
 
 nodes:
-  - cloudlets: 8
+  - cloudlets: 16
     nodeGroup: cp
     nodeType: javaengine
     tag: openjdk-11.0.22-almalinux-9
