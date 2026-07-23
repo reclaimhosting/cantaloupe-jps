@@ -7,7 +7,7 @@ logo: images/cantaloupe.png
 
 description: 
   text: Cantaloupe is an open-source IIIF-compliant dynamic image server for on-demand generation of derivatives of high-resolution source images.
-  
+
 categories:
 - apps/education
 
@@ -15,14 +15,18 @@ globals:
   password: ${fn.password(10)}
 
 nodes:
+  - cloudlets: 8
+    nodeGroup: bl
+    nodeType: nginx
+
   - cloudlets: 16
     nodeGroup: cp
     nodeType: javaengine
     tag: openjdk-11.0.22-almalinux-9
-  
+
 onInstall:
   - deploy
-  - restartNodes:
+  - restartContainers:
       nodeGroup: [cp]
 
 actions:
@@ -44,10 +48,9 @@ actions:
         echo "-Djava.awt.headless=true -Dcantaloupe.config=/home/jelastic/APP/cantaloupe.properties " >> /home/jelastic/conf/variables.conf;
         sed -i 's|endpoint.admin.secret =|endpoint.admin.secret = ${globals.password}|g' ./cantaloupe.properties;
         sed -i 's|endpoint.admin.enabled = false|endpoint.admin.enabled = true|g' ./cantaloupe.properties;
-        sed -i 's|endpoint.admin.enabled = false|endpoint.admin.enabled = true|g' ./cantaloupe.properties;
         sed -i 's|http.port = 8182|http.port = 8080|g' ./cantaloupe.properties;
         mkdir /home/jelastic/images
-      
+
     - env.file.AddFavorite:
         nodeGroup: cp
         path: /home/jelastic/images
